@@ -7,7 +7,7 @@ A small .NET 9 sample that demonstrates an async export workflow using Kafka.
 1. Start Kafka and Kafka UI
 
 ```powershell
-& "C:\Users\duy.phan\AppData\Local\Programs\Podman\podman.exe" compose -f ".\compose.yaml" up -d
+podman compose -f .\compose.yaml up -d
 ```
 
 2. Run API (Terminal 1)
@@ -25,7 +25,7 @@ dotnet run --project .\KafkaDataExport\KafkaDataExport.Worker\KafkaDataExport.Wo
 4. Submit export request (Terminal 3)
 
 ```powershell
-Invoke-RestMethod -Method Post -Uri "http://localhost:5145/api/export/request" -ContentType "application/json" -Body '{"customerId":"CUST-001","format":"json","requestedBy":"duy"}'
+Invoke-RestMethod -Method Post -Uri "http://localhost:5145/api/export/request" -ContentType "application/json" -Body '{"customerId":"CUST-001","format":"json","requestedBy":"demo-user"}'
 ```
 
 5. Check processed exports (Terminal 3)
@@ -47,14 +47,14 @@ Sample body:
 {
   "customerId": "CUST-001",
   "format": "json",
-  "requestedBy": "duy"
+  "requestedBy": "demo-user"
 }
 ```
 
 PowerShell:
 
 ```powershell
-Invoke-RestMethod -Method Post -Uri "http://localhost:5145/api/export/request" -ContentType "application/json" -Body '{"customerId":"CUST-001","format":"json","requestedBy":"duy"}'
+Invoke-RestMethod -Method Post -Uri "http://localhost:5145/api/export/request" -ContentType "application/json" -Body '{"customerId":"CUST-001","format":"json","requestedBy":"demo-user"}'
 ```
 
 Expected response:
@@ -122,13 +122,13 @@ Workspace structure:
 Start Kafka and Kafka UI:
 
 ```powershell
-& "C:\Users\duy.phan\AppData\Local\Programs\Podman\podman.exe" compose -f ".\compose.yaml" up -d
+podman compose -f .\compose.yaml up -d
 ```
 
 Check status:
 
 ```powershell
-& "C:\Users\duy.phan\AppData\Local\Programs\Podman\podman.exe" compose -f ".\compose.yaml" ps
+podman compose -f .\compose.yaml ps
 ```
 
 Open Kafka UI:
@@ -137,7 +137,7 @@ Open Kafka UI:
 - If localhost forwarding is unavailable on your machine, use the Podman VM IP shown by:
 
 ```powershell
-& "C:\Users\duy.phan\AppData\Local\Programs\Podman\podman.exe" machine ssh "ip -4 addr show"
+podman machine ssh "ip -4 addr show"
 ```
 
 ## Run the applications
@@ -173,7 +173,7 @@ Sample body:
 {
   "customerId": "CUST-001",
   "format": "json",
-  "requestedBy": "duy"
+  "requestedBy": "demo-user"
 }
 ```
 
@@ -200,19 +200,19 @@ GET http://localhost:5001/exports/{jobId}
 List topics:
 
 ```powershell
-& "C:\Users\duy.phan\AppData\Local\Programs\Podman\podman.exe" exec kafka /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
+podman exec kafka /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
 ```
 
 Describe a topic:
 
 ```powershell
-& "C:\Users\duy.phan\AppData\Local\Programs\Podman\podman.exe" exec kafka /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic export-requests
+podman exec kafka /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic export-requests
 ```
 
 Read sample messages:
 
 ```powershell
-& "C:\Users\duy.phan\AppData\Local\Programs\Podman\podman.exe" exec -it kafka /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic export-requests --from-beginning --max-messages 10
+podman exec -it kafka /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic export-requests --from-beginning --max-messages 10
 ```
 
 ## Configuration notes
@@ -247,7 +247,7 @@ If http://localhost:5001/exports returns connection refused, Worker is not runni
 Validate compose file:
 
 ```powershell
-& "C:\Users\duy.phan\AppData\Local\Programs\Podman\podman.exe" compose -f ".\compose.yaml" config
+podman compose -f .\compose.yaml config
 ```
 
 ## Notes
